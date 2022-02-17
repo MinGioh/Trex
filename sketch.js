@@ -1,3 +1,4 @@
+//variáveis globais
 var trex, trex_running, edges, trexp, trexgo;
 var groundImage, ground;
 var invisibleGround;
@@ -32,6 +33,9 @@ function preload()
 
 function setup(){
   createCanvas(600,200);
+
+  //variável local
+  var teste = 1;
   
   //criando o trex
   trex = createSprite(50,160,20,50);
@@ -39,7 +43,7 @@ function setup(){
   trex.addAnimation("parado", trexp);
   trex.addAnimation("bateu", trexgo);
   trex.setCollider("circle",0,0,40);
-  trex.debug = false;
+  trex.debug = false;  
   edges = createEdgeSprites();
 
   //gameOver e restart
@@ -76,15 +80,14 @@ function draw()
   background("white");
 
   text("Pontuação: " + pontos,500,35);
-   
+  //(+) => concatenação = união
   
   //registrando a posição y do trex
   //console.log(trex.y)
   if(gameState === START)
   {
-    
     trex.changeAnimation("parado", trexp);
-    trex_running.velocityX = 0;
+    trex.velocityX = 0;  //trex_running.velocityX = 0;
     ground.velocityX = 0;
     text("Aperte enter para começar",300,100);
     
@@ -97,8 +100,8 @@ function draw()
       //Estado do jogo PLAY
      else if(gameState === PLAY)
      {
-      ground.velocityX = -3 - 3*pontos/100;
-      pontos = pontos + Math.round(frameCount/60);
+      ground.velocityX = -3// - 3*pontos/100;
+      pontos = pontos + Math.round(frameCount/90);
       if(pontos % 100 === 0 && pontos > 0){
         cP.play();
         console.log("Oii");
@@ -109,9 +112,6 @@ function draw()
        pular.play(); //não executa
     }
       trex.velocityY = trex.velocityY + 0.5;
-      
-     
-      
       
       if(ground.x < 0){
       ground.x = ground.width/2;
@@ -125,9 +125,9 @@ function draw()
        }
      }
        else if(gameState === END){
-        gcacto.setVelocityXEach(0);
         ground.velocityX = 0;
         trex.velocityX = 0;
+        gcacto.setVelocityXEach(0);
         gnuvens.setVelocityXEach(0);
         gcacto.setLifetimeEach(-1);
         gnuvens.setLifetimeEach(-1);
@@ -136,17 +136,15 @@ function draw()
         rst.visible = true;
         gameOver.depth = nuvens.depth + 1;
         rst.depth = nuvens.depth + 1;
+
+        if(mousePressedOver(rst)){
+          reset();
+        }
        }
   
      //impedir que o trex caia
   trex.collide(invisibleGround);
   
-  
-     
-     //console.log(frameCount);
-
-  /*var n = Math.round(random(1,6));
-  console.log(n);*/
   
   drawSprites();
 }
@@ -171,7 +169,7 @@ function cactos ()
   if(frameCount % 90 === 0)
   {
     cacto = createSprite(600,160,20,20);
-    cacto.velocityX = -3 - pontos/100;
+    cacto.velocityX = -3 //- pontos/100;
     var n = Math.round(random(1,6));
     switch(n)
     {
@@ -193,4 +191,17 @@ function cactos ()
     cacto.scale = 0.6;
     gcacto.add(cacto);
   }
+}
+
+function reset(){
+  gameState = START;
+
+ //muda a animação do trex
+ 
+ //zerar pontuação
+
+ //destruir os cactos e nuvens
+ gcacto.destroyEach();
+ gnuvens.destroyEach();
+
 }
