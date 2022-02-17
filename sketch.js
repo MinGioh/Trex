@@ -100,7 +100,7 @@ function draw()
       //Estado do jogo PLAY
      else if(gameState === PLAY)
      {
-      ground.velocityX = -3// - 3*pontos/100;
+      ground.velocityX = -3 - 3*pontos/100;
       pontos = pontos + Math.round(frameCount/90);
       if(pontos % 100 === 0 && pontos > 0){
         cP.play();
@@ -169,7 +169,7 @@ function cactos ()
   if(frameCount % 90 === 0)
   {
     cacto = createSprite(600,160,20,20);
-    cacto.velocityX = -3 //- pontos/100;
+    cacto.velocityX = -3 - pontos/100;
     var n = Math.round(random(1,6));
     switch(n)
     {
@@ -197,11 +197,17 @@ function reset(){
   gameState = START;
 
  //muda a animação do trex
+ trex.changeAnimation("parado", trexp);
  
  //zerar pontuação
+  pontos = 0;
 
  //destruir os cactos e nuvens
  gcacto.destroyEach();
  gnuvens.destroyEach();
+
+ //visibilidade dos sprites
+ rst.visible = false;
+ gameOver.visible = false;
 
 }
