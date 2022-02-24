@@ -32,13 +32,13 @@ function preload()
 }
 
 function setup(){
-  createCanvas(600,200);
+  createCanvas(windowWidth,windowHeight);
 
   //variável local
   var teste = 1;
   
   //criando o trex
-  trex = createSprite(50,160,20,50);
+  trex = createSprite(50,height-40,20,50);
   trex.addAnimation("running", trex_running);
   trex.addAnimation("parado", trexp);
   trex.addAnimation("bateu", trexgo);
@@ -47,11 +47,11 @@ function setup(){
   edges = createEdgeSprites();
 
   //gameOver e restart
-  gameOver = createSprite(300,80);
+  gameOver = createSprite(width/2,height/2-20);
   gameOver.addImage(gameO);
   gameOver.scale = 0.5;
   gameOver.visible = false;
-  rst = createSprite(300,100);
+  rst = createSprite(width/2,height/2);
   rst.addImage(restart);
   rst.scale = 0.5;
   rst.visible = false;
@@ -61,11 +61,12 @@ function setup(){
   trex.x = 50;
 
   //criar sprite do solo
-  ground = createSprite(300,180,600,20);
+  ground = createSprite(width/2,height-20,width,20);
   ground.addImage(groundImage);
+  ground.scale = 1.5;
 
   //criar solo invisivel
- invisibleGround = createSprite(40,190,30,20);
+ invisibleGround = createSprite(40,height-10,30,20);
  invisibleGround.visible = false;
 
   //criação dos grupos
@@ -79,17 +80,17 @@ function draw()
   //definir a cor do plano de fundo 
   background("white");
 
-  text("Pontuação: " + pontos,500,35);
+  text("Pontuação: " + pontos,width-100,35);
   //(+) => concatenação = união
   
   //registrando a posição y do trex
-  //console.log(trex.y)
+  //console.log(getFrameRate());
   if(gameState === START)
   {
     trex.changeAnimation("parado", trexp);
     trex.velocityX = 0;  //trex_running.velocityX = 0;
     ground.velocityX = 0;
-    text("Aperte enter para começar",300,100);
+    text("Aperte enter para começar",width/2-30,height/2);
     
     if(keyDown("enter"))
     {
@@ -100,14 +101,15 @@ function draw()
       //Estado do jogo PLAY
      else if(gameState === PLAY)
      {
-      ground.velocityX = -3 - 3*pontos/100;
-      pontos = pontos + Math.round(frameCount/90);
+      ground.velocityX = -3 - 3*pontos/60;
+      pontos = pontos + Math.round(getFrameRate()/60);
+      console.log(getFrameRate()/60);
       if(pontos % 100 === 0 && pontos > 0){
         cP.play();
-        console.log("Oii");
+       
        }
        trex.changeAnimation("running", trex_running);
-       if(keyDown("space") && trex.y>=150){
+       if(keyDown("space") && trex.y>=height-50){
        trex.velocityY = -10;
        pular.play(); //não executa
     }
@@ -126,7 +128,8 @@ function draw()
      }
        else if(gameState === END){
         ground.velocityX = 0;
-        trex.velocityX = 0;
+        trex.velocityY = 0;
+        trex.y = height-40;
         gcacto.setVelocityXEach(0);
         gnuvens.setVelocityXEach(0);
         gcacto.setLifetimeEach(-1);
@@ -153,23 +156,23 @@ function nuvem()
 {
   if(frameCount % 90 === 0)
   {
-    nuvens = createSprite(600,80,20,20);
+    nuvens = createSprite(width,height/2,20,20);
     gnuvens.add(nuvens);
     nuvens.velocityX = -2;
     nuvens.addImage(nuvemImg);
-    nuvens.y = Math.round(random(50,100));
+    nuvens.y = Math.round(random(height/2-50,height/2+50));
     trex.depth = nuvens.depth + 1;
-    nuvens.lifetime = 320;
+    nuvens.lifetime = 600;
   }
   
 }
 
 function cactos ()
 {
-  if(frameCount % 90 === 0)
+  if(frameCount % 60 === 0)
   {
-    cacto = createSprite(600,160,20,20);
-    cacto.velocityX = -3 - pontos/100;
+    cacto = createSprite(width,height-40,20,20);
+    cacto.velocityX = -3 - 3*pontos/60;
     var n = Math.round(random(1,6));
     switch(n)
     {
@@ -187,7 +190,7 @@ function cactos ()
       break;
       default: break;
     }
-    cacto.lifetime = 220;
+    cacto.lifetime = 600;
     cacto.scale = 0.6;
     gcacto.add(cacto);
   }
