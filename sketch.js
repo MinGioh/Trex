@@ -92,9 +92,10 @@ function draw()
     ground.velocityX = 0;
     text("Aperte enter para começar",width/2-30,height/2);
     
-    if(keyDown("enter"))
+    if(keyDown("enter")||touches.length>0)
     {
       gameState = PLAY;
+      touches = [];
   
     }
   }
@@ -109,9 +110,10 @@ function draw()
        
        }
        trex.changeAnimation("running", trex_running);
-       if(keyDown("space") && trex.y>=height-50){
+       if((keyDown("space")||touches.length> 0) && trex.y>=height-50){
        trex.velocityY = -10;
-       pular.play(); //não executa
+       pular.play();
+       touches = [];
     }
       trex.velocityY = trex.velocityY + 0.5;
       
@@ -140,8 +142,9 @@ function draw()
         gameOver.depth = nuvens.depth + 1;
         rst.depth = nuvens.depth + 1;
 
-        if(mousePressedOver(rst)){
+        if(mousePressedOver(rst)||touches.length>0){
           reset();
+          touches = [];
         }
        }
   
