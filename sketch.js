@@ -101,8 +101,8 @@ function draw()
       //Estado do jogo PLAY
      else if(gameState === PLAY)
      {
-      ground.velocityX = -3 - 3*pontos/60;
       pontos = pontos + Math.round(getFrameRate()/60);
+      ground.velocityX = -3 - pontos/60;
       console.log(getFrameRate()/60);
       if(pontos % 100 === 0 && pontos > 0){
         cP.play();
@@ -162,17 +162,17 @@ function nuvem()
     nuvens.addImage(nuvemImg);
     nuvens.y = Math.round(random(height/2-50,height/2+50));
     trex.depth = nuvens.depth + 1;
-    nuvens.lifetime = 600;
+    nuvens.lifetime = 800;
   }
   
 }
 
 function cactos ()
 {
-  if(frameCount % 60 === 0)
+  if(frameCount % 80 === 0)
   {
     cacto = createSprite(width,height-40,20,20);
-    cacto.velocityX = -3 - 3*pontos/60;
+    cacto.velocityX = -6 - pontos/60;
     var n = Math.round(random(1,6));
     switch(n)
     {
